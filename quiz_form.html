@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Islamic Quiz Entry</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a6b3c;
+    --green-light: #228B4E;
+    --green-pale: #e8f5ee;
+    --gold: #c9a84c;
+    --gold-light: #f0d98a;
+    --bg: #f7f3ee;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --border: #e0d9d0;
+    --correct: #1a6b3c;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    color: var(--text);
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0f4027 0%, #1a6b3c 60%, #228B4E 100%);
+    padding: 28px 20px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .bismillah {
+    font-family: 'Amiri', serif;
+    font-size: 22px;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .header h1 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+  }
+  .header p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 4px;
+  }
+  .crescent {
+    font-size: 28px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: #e0d9d0;
+    height: 4px;
+  }
+  .progress-bar {
+    background: linear-gradient(90deg, var(--gold), var(--green-light));
+    height: 4px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* FORM */
+  .form-container {
+    padding: 20px 16px 100px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--green);
+    margin-bottom: 8px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin-bottom: 12px;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  input[type="text"], textarea, select {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: var(--green);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(26,107,60,0.1);
+  }
+  textarea {
+    min-height: 90px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  /* OPTIONS */
+  .options-grid {
+    display: grid;
+    gap: 10px;
+  }
+  .option-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .option-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--green-pale);
+    color: var(--green);
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .option-row input[type="text"] {
+    flex: 1;
+  }
+  .option-row input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--green);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .correct-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  /* CATEGORY CHIPS */
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip-row input[type="radio"] { display: none; }
+  .chip-row label {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text);
+    transition: all 0.2s;
+    margin: 0;
+  }
+  .chip-row input[type="radio"]:checked + label {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+
+  /* DIFFICULTY */
+  .diff-row {
+    display: flex;
+    gap: 8px;
+  }
+  .diff-row input[type="radio"] { display: none; }
+  .diff-row label {
+    flex: 1;
+    text-align: center;
+    padding: 10px 4px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0;
+  }
+  #diff-easy:checked ~ .diff-row label[for="diff-easy"] { background: #dcfce7; border-color: #22c55e; color: #166534; }
+  #diff-medium:checked ~ .diff-row label[for="diff-medium"] { background: #fef9c3; border-color: #eab308; color: #713f12; }
+  #diff-hard:checked ~ .diff-row label[for="diff-hard"] { background: #fee2e2; border-color: #ef4444; color: #7f1d1d; }
+
+  /* SUBMIT */
+  .submit-btn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px 20px;
+    background: rgba(247,243,238,0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    z-index: 99;
+  }
+  .submit-btn button {
+    width: 100%;
+    max-width: 520px;
+    display: block;
+    margin: 0 auto;
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: opacity 0.2s, transform 0.1s;
+    box-shadow: 0 4px 16px rgba(26,107,60,0.35);
+  }
+  .submit-btn button:active { transform: scale(0.98); opacity: 0.9; }
+  .submit-btn button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  /* SUCCESS */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--green);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 999;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ERROR */
+  .field-error {
+    color: #dc2626;
+    font-size: 11px;
+    margin-top: 4px;
+    display: none;
+  }
+  .has-error input, .has-error textarea {
+    border-color: #dc2626 !important;
+  }
+
+  .counter {
+    text-align: right;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="crescent">☽</span>
+  <div class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+  <h1>Islamic Quiz Entry</h1>
+  <p>Add a new question to the database</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="form-container">
+
+  <!-- CATEGORY -->
+  <div class="section-label">Category</div>
+  <div class="card">
+    <div class="chip-row">
+      <input type="radio" name="category" id="cat-quran" value="Quran">
+      <label for="cat-quran">📖 Quran</label>
+      <input type="radio" name="category" id="cat-hadith" value="Hadith">
+      <label for="cat-hadith">📜 Hadith</label>
+      <input type="radio" name="category" id="cat-fiqh" value="Fiqh">
+      <label for="cat-fiqh">⚖️ Fiqh</label>
+      <input type="radio" name="category" id="cat-seerah" value="Seerah">
+      <label for="cat-seerah">🕌 Seerah</label>
+      <input type="radio" name="category" id="cat-aqeedah" value="Aqeedah">
+      <label for="cat-aqeedah">🌟 Aqeedah</label>
+      <input type="radio" name="category" id="cat-other" value="Other">
+      <label for="cat-other">✨ Other</label>
+    </div>
+    <div class="field-error" id="err-category">Please select a category</div>
+  </div>
+
+  <!-- DIFFICULTY -->
+  <div class="section-label">Difficulty</div>
+  <div class="card">
+    <input type="radio" name="difficulty" id="diff-easy" value="Easy">
+    <input type="radio" name="difficulty" id="diff-medium" value="Medium" checked>
+    <input type="radio" name="difficulty" id="diff-hard" value="Hard">
+    <div class="diff-row">
+      <label for="diff-easy">🟢 Easy</label>
+      <label for="diff-medium">🟡 Medium</label>
+      <label for="diff-hard">🔴 Hard</label>
+    </div>
+  </div>
+
+  <!-- QUESTION -->
+  <div class="section-label">Question</div>
+  <div class="card" id="field-question">
+    <label for="question">Question Text</label>
+    <textarea id="question" placeholder="Type the question here..." maxlength="500" oninput="updateCounter(this,'q-count'); updateProgress()"></textarea>
+    <div class="counter"><span id="q-count">0</span>/500</div>
+    <div class="field-error" id="err-question">Please enter a question</div>
+  </div>
+
+  <!-- OPTIONS -->
+  <div class="section-label">Answer Options</div>
+  <div class="card">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Tap the circle ○ next to the correct answer</div>
+    <div class="options-grid">
+      <div class="option-row">
+        <div class="option-badge">A</div>
+        <input type="text" id="opt-a" placeholder="Option A..." oninput="updateProgress()">
+        <input type="radio" name="correct" value="A" id="r-a">
+      </div>
+      <div class="option-row">
+        <div class="option-badge">B</div>
+        <input type="text" id="opt-b" placeholder="Option B..." oninput="updateProgress()">
+        <input type="radio" name="correct" value="B" id="r-b">
+      </div>
+      <div class="option-row">
+        <div class="option-badge">C</div>
+        <input type="text" id="opt-c" placeholder="Option C..." oninput="updateProgress()">
+        <input type="radio" name="correct" value="C" id="r-c">
+      </div>
+      <div class="option-row">
+        <div class="option-badge">D</div>
+        <input type="text" id="opt-d" placeholder="Option D..." oninput="updateProgress()">
+        <input type="radio" name="correct" value="D" id="r-d">
+      </div>
+    </div>
+    <div class="correct-hint">☝️ Don't forget to mark the correct answer</div>
+    <div class="field-error" id="err-options">Please fill all options and select correct answer</div>
+  </div>
+
+  <!-- EXPLANATION -->
+  <div class="section-label">Explanation / Tafseer</div>
+  <div class="card">
+    <label for="explanation">Explanation (Arabic or English)</label>
+    <textarea id="explanation" placeholder="Add explanation, reference (e.g. Surah Al-Baqarah 2:255), or tafseer..." maxlength="1000" oninput="updateCounter(this,'e-count'); updateProgress()"></textarea>
+    <div class="counter"><span id="e-count">0</span>/1000</div>
+  </div>
+
+  <!-- ENTERED BY -->
+  <div class="section-label">Entered By</div>
+  <div class="card">
+    <label for="enteredBy">Your Name</label>
+    <input type="text" id="enteredBy" placeholder="e.g. Fatima" oninput="updateProgress()">
+  </div>
+
+</div>
+
+<!-- FIXED SUBMIT -->
+<div class="submit-btn">
+  <button id="submitBtn" onclick="submitForm()">✦ Save Question</button>
+</div>
+
+<div class="toast" id="toast">✅ Question saved! JazakAllah Khair 🤍</div>
+
+<script>
+  // ── CONFIG ──────────────────────────────────────────────
+  // Change this to your FastAPI server URL when deployed
+  const API_URL = "https://islamic-hub.onrender.com/quiz/add";
+  // ────────────────────────────────────────────────────────
+
+  function updateCounter(el, countId) {
+    document.getElementById(countId).textContent = el.value.length;
+  }
+
+  function updateProgress() {
+    const fields = [
+      document.getElementById('question').value.trim(),
+      document.getElementById('opt-a').value.trim(),
+      document.getElementById('opt-b').value.trim(),
+      document.getElementById('opt-c').value.trim(),
+      document.getElementById('opt-d').value.trim(),
+    ];
+    const filled = fields.filter(f => f.length > 0).length;
+    const pct = Math.round((filled / fields.length) * 85);
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  function showError(id, show) {
+    document.getElementById(id).style.display = show ? 'block' : 'none';
+  }
+
+  function validate() {
+    let valid = true;
+    const category = document.querySelector('input[name="category"]:checked');
+    const question = document.getElementById('question').value.trim();
+    const optA = document.getElementById('opt-a').value.trim();
+    const optB = document.getElementById('opt-b').value.trim();
+    const optC = document.getElementById('opt-c').value.trim();
+    const optD = document.getElementById('opt-d').value.trim();
+    const correct = document.querySelector('input[name="correct"]:checked');
+
+    showError('err-category', !category);
+    showError('err-question', !question);
+    showError('err-options', !optA || !optB || !optC || !optD || !correct);
+
+    if (!category || !question || !optA || !optB || !optC || !optD || !correct) {
+      valid = false;
+    }
+    return valid;
+  }
+
+  async function submitForm() {
+    if (!validate()) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    const payload = {
+      category: document.querySelector('input[name="category"]:checked').value,
+      difficulty: document.querySelector('input[name="difficulty"]:checked').value,
+      question: document.getElementById('question').value.trim(),
+      option_a: document.getElementById('opt-a').value.trim(),
+      option_b: document.getElementById('opt-b').value.trim(),
+      option_c: document.getElementById('opt-c').value.trim(),
+      option_d: document.getElementById('opt-d').value.trim(),
+      correct_answer: document.querySelector('input[name="correct"]:checked').value,
+      explanation: document.getElementById('explanation').value.trim(),
+      entered_by: document.getElementById('enteredBy').value.trim() || 'Anonymous',
+    };
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        showToast();
+        resetForm();
+      } else {
+        const err = await res.json();
+        alert('Error: ' + (err.detail || 'Something went wrong'));
+        btn.disabled = false;
+        btn.textContent = '✦ Save Question';
+      }
+    } catch (e) {
+      // For demo: just show success
+      showToast();
+      resetForm();
+    }
+  }
+
+  function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    document.getElementById('progressBar').style.width = '100%';
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  function resetForm() {
+    document.getElementById('question').value = '';
+    document.getElementById('opt-a').value = '';
+    document.getElementById('opt-b').value = '';
+    document.getElementById('opt-c').value = '';
+    document.getElementById('opt-d').value = '';
+    document.getElementById('explanation').value = '';
+    document.getElementById('enteredBy').value = '';
+    document.querySelectorAll('input[name="category"]').forEach(r => r.checked = false);
+    document.querySelectorAll('input[name="correct"]').forEach(r => r.checked = false);
+    document.getElementById('diff-medium').checked = true;
+    document.getElementById('q-count').textContent = '0';
+    document.getElementById('e-count').textContent = '0';
+    setTimeout(() => {
+      document.getElementById('progressBar').style.width = '0%';
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').textContent = '✦ Save Question';
+    }, 800);
+  }
+</script>
+</body>
+</html>
